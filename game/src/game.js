@@ -136,8 +136,6 @@ export function pickIngredient(g, ing) {
   if (g.screen !== 'play') return;
   const def = INGREDIENTS[ing];
   if (def.grill) {
-    const slot = g.grill.find((s) => s === null);
-    if (!slot && slot !== null) { g.events.push('buzz'); flash(g, 'Grill is full!'); return; }
     const idx = g.grill.indexOf(null);
     if (idx === -1) { g.events.push('buzz'); flash(g, 'Grill is full!'); return; }
     g.grill[idx] = { ing, t: 0, state: 'raw' };
