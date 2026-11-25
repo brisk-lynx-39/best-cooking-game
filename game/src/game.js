@@ -152,14 +152,14 @@ export function takeGrill(g, idx) {
   if (g.screen !== 'play') return;
   const slot = g.grill[idx];
   if (!slot) return;
-  if (slot.state === 'raw') { g.shake = Math.max(g.shake, 0.35); g.events.push('buzz'); flash(g, 'Still cooking…'); return; }
+  if (slot.state === 'raw') { g.shake = Math.max(g.shake, 0.35); deny(g, 'Still cooking…'); return; }
   if (slot.state === 'burnt') {
     g.grill[idx] = null;
     g.events.push('trash');
     flash(g, 'Burnt — binned!');
     return;
   }
-  if (g.plate.length >= PLATE_MAX) { g.events.push('buzz'); flash(g, 'Plate is full!'); return; }
+  if (g.plate.length >= PLATE_MAX) { deny(g, 'Plate is full!'); return; }
   g.grill[idx] = null;
   g.plate.push({ ing: slot.ing, perfect: true });
   g.events.push('place');
@@ -174,6 +174,9 @@ export function trashPlate(g) {
 }
 
 function flash(g, text) { g.message = text; g.messageT = 1.4; }
+
+/** Refuse an action: buzz and say why. */
+function deny(g, text) { g.events.push('buzz'); flash(g, text); }
 
 /** Serve: the plate must exactly match one open order (as a multiset). */
 export function serve(g) {
